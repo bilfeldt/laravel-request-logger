@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Bilfeldt\RequestLogger\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class RequestLoggerCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-request-logger';
 
     public $description = 'My command';
 
