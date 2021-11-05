@@ -2,9 +2,9 @@
 
 namespace Bilfeldt\RequestLogger;
 
+use Bilfeldt\RequestLogger\Commands\RequestLoggerCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Bilfeldt\RequestLogger\Commands\RequestLoggerCommand;
 
 class RequestLoggerServiceProvider extends PackageServiceProvider
 {
