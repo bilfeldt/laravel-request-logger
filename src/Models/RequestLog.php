@@ -5,8 +5,8 @@ namespace Bilfeldt\RequestLogger\Models;
 use Bilfeldt\RequestLogger\RequestLoggerFacade;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ use Illuminate\View\View;
 class RequestLog extends Model
 {
     use HasFactory;
-    use Prunable;
+    use MassPrunable;
 
     /**
      * The attributes that are mass assignable.

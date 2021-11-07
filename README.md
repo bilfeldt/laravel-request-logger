@@ -121,6 +121,16 @@ This package adds a macro `getUniqueId()` for the `Request` which generates a un
 $request->getUniqueId(); // Example: 94d0e2d6-4cc6-449c-9140-80bca47d29b4
 ```
 
+## Pruning
+
+The number of logged requests can quickly grow if you are not pruning the logs regularly. In order to keep the logs manageable, you can use the `prune` command to remove old logs as [described in the Laravel Docs](https://laravel.com/docs/8.x/eloquent#pruning-models):
+
+```php
+$schedule->command('model:prune', [
+    '--model' => [\Bilfeldt\RequestLogger\Models\RequestLog::class],
+])->daily();
+```
+
 ## Testing
 
 ```bash
