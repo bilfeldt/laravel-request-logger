@@ -14,7 +14,7 @@ class RequestLogger extends Manager
         return array_merge($this->filters, config('request-logger.filters', []));
     }
 
-    public function addFilters(string ... $filters): void
+    public function addFilters(string ...$filters): void
     {
         $this->filters = array_merge($filters, $this->filters);
     }
@@ -28,6 +28,6 @@ class RequestLogger extends Manager
     {
         $class = config('request-logger.drivers.model.class');
 
-        return new ModelLogger(new $class);
+        return new ModelLogger(new $class());
     }
 }

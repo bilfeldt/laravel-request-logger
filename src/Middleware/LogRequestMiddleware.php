@@ -24,7 +24,7 @@ class LogRequestMiddleware
 
         if ($context = config('request-logger.log_context')) {
             Log::withContext([
-                $context => $requestId
+                $context => $requestId,
             ]);
         }
 

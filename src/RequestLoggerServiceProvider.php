@@ -33,7 +33,6 @@ class RequestLoggerServiceProvider extends PackageServiceProvider
     public function packageBooted()
     {
         Request::macro('getUniqueId', function (): string {
-
             if (! $this->attributes->has('uuid')) {
                 $this->attributes->set('uuid', (string) Str::orderedUuid());
             }
@@ -41,8 +40,7 @@ class RequestLoggerServiceProvider extends PackageServiceProvider
             return $this->attributes->get('uuid');
         });
 
-        Request::macro('enableLog', function (string ... $drivers): Request {
-
+        Request::macro('enableLog', function (string ...$drivers): Request {
             $loggers = $this->attributes->get('log', []);
 
             if (empty($drivers)) {
@@ -59,7 +57,6 @@ class RequestLoggerServiceProvider extends PackageServiceProvider
         });
 
         Response::macro('getLoggableContent', function (): array {
-
             $content = $this->getContent();
 
             if (is_string($content)) {
