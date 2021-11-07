@@ -11,6 +11,6 @@ class RequestLoggerFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return 'laravel-request-logger';
+        return RequestLogger::class;
     }
 }

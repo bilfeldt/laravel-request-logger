@@ -2,12 +2,12 @@
 
 namespace Bilfeldt\RequestLogger\Database\Factories;
 
+use Bilfeldt\RequestLogger\Models\RequestLog;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/*
-class ModelFactory extends Factory
+class RequestLogFactory extends Factory
 {
-    protected $model = YourModel::class;
+    protected $model = RequestLog::class;
 
     public function definition()
     {
@@ -16,4 +16,3 @@ class ModelFactory extends Factory
         ];
     }
 }
-*/

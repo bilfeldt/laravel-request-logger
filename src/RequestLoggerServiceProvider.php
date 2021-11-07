@@ -2,9 +2,13 @@
 
 namespace Bilfeldt\RequestLogger;
 
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Bilfeldt\RequestLogger\Commands\RequestLoggerCommand;
 
 class RequestLoggerServiceProvider extends PackageServiceProvider
 {
@@ -18,8 +22,81 @@ class RequestLoggerServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-request-logger')
             ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel-request-logger_table')
-            ->hasCommand(RequestLoggerCommand::class);
+            ->hasMigration('create_request_logs_table');
+    }
+
+    public function packageRegistered()
+    {
+        $this->app->register(EventServiceProvider::class);
+    }
+
+    public function packageBooted()
+    {
+        Request::macro('getUniqueId', function (): string {
+
+            if (! $this->attributes->has('uuid')) {
+                $this->attributes->set('uuid', (string) Str::orderedUuid());
+            }
+
+            return $this->attributes->get('uuid');
+        });
+
+        Request::macro('enableLog', function (string ... $drivers): Request {
+
+            $loggers = $this->attributes->get('log', []);
+
+            if (empty($drivers)) {
+                $loggers[] = RequestLoggerFacade::getDefaultDriver();
+            }
+
+            foreach ($drivers as $driver) {
+                $loggers[] = $driver;
+            }
+
+            $this->attributes->set('log', $loggers);
+
+            return $this;
+        });
+
+        Response::macro('getLoggableContent', function (): array {
+
+            $content = $this->getContent();
+
+            if (is_string($content)) {
+                if (is_array(json_decode($content, true)) &&
+                    json_last_error() === JSON_ERROR_NONE) {
+                    return intdiv(mb_strlen($content), 1000) <= 64
+                        ? Arr::replaceParameters(json_decode($content, true), []) // TODO: Insert parameter that must be replaced
+                        : ['Purged By bilfeldt/laravel-request-logger'];
+                }
+
+                if (Str::startsWith(strtolower($this->headers->get('Content-Type')), 'text/plain')) {
+                    return intdiv(mb_strlen($content), 1000) <= 64 ? [$content] : ['Purged By bilfeldt/laravel-request-logger'];
+                }
+            }
+
+            if ($this instanceof RedirectResponse) {
+                return ['Redirected to '.$this->getTargetUrl()];
+            }
+
+            if ($this->getOriginalContent() instanceof View) {
+                return [
+                    'view' => $this->getOriginalContent()->getPath(),
+                    //'data' => $this->extractDataFromView($this->getOriginalContent()),
+                ];
+            }
+
+            return ['HTML Response'];
+        });
+
+        Arr::macro('replaceParameters', function (array $array, array $hidden, string $value = '********'): array {
+            foreach ($hidden as $parameter) {
+                if (Arr::get($array, $parameter)) {
+                    Arr::set($array, $parameter, '********');
+                }
+            }
+
+            return $array;
+        });
     }
 }

@@ -1,0 +1,193 @@
+<?php
+
+namespace Bilfeldt\RequestLogger\Models;
+
+use Bilfeldt\RequestLogger\RequestLoggerFacade;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
+
+class RequestLog extends Model
+{
+    use HasFactory;
+    use Prunable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'ip',
+        'session',
+        'status',
+        'method',
+        'route',
+        'path',
+        'headers',
+        'payload',
+        'response_headers',
+        'response_body',
+        'time',
+        'memory',
+    ];
+
+    protected $casts = [
+        'headers' => 'json',
+        'payload' => 'json',
+        'response_headers' => 'json',
+        'response_body' => 'json',
+    ];
+
+
+    //======================================================================
+    // ACCESSORS
+    //======================================================================
+
+    //======================================================================
+    // MUTATORS
+    //======================================================================
+
+    //======================================================================
+    // SCOPES
+    //======================================================================
+
+    //======================================================================
+    // RELATIONS
+    //======================================================================
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo('App\\Models\\User');
+    }
+
+    public function team(): BelongsTo
+    {
+        return $this->belongsTo('App\\Models\\Team');
+    }
+
+    //======================================================================
+    // METHODS
+    //======================================================================
+
+    /**
+     * Get the prunable model query.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function prunable()
+    {
+        return static::where('created_at', '<=', now()->subDays(config('request-logger.drivers.model.prune')));
+    }
+
+    // TODO: The response can be either of Illuminate\Http\Response|Illuminate\Http\RedirectResponse
+    public function log(Request $request, $response, ?int $time = null, ?int $memory = null): void
+    {
+        $model = new static();
+
+        $model->uuid = $request->getUniqueId();
+        $model->ip = $request->ip();
+        $model->session = $request->hasSession() ? $request->session()->getId() : null;
+        $model->method = $request->getMethod();
+        $model->route = $request->route()->getName();
+        $model->path = $request->path();
+        $model->status = $response->getStatusCode();
+        $model->headers = $this->getFiltered($request->headers->all()) ?: null;
+        $model->payload = $this->getFiltered($request->input()) ?: null;
+        $model->response_headers = $this->getFiltered($response->headers->all()) ?: null;
+        $model->response_body = $this->getLoggableResponseContent($response);
+        $model->time = $time;
+        $model->memory = round($memory / 1024 / 1024, 2); // [MB]
+
+        if ($user = $request->user()) {
+            $model->user()->associate($user);
+        }
+
+        if ($team = $this->getRequestTeam($request)) {
+            $model->team()->associate($team);
+        }
+
+        $model->save();
+    }
+
+    public function aggregate(Request $request, $response, Carbon $date): void
+    {
+        static::firstOrNew([ // There should be a compound index with all these fields for performance
+            'uuid' => null, // This is required to prevent updating detailed records
+            //'date' => null,//(string) $date,
+            'user_id' => optional($request->user())->getKey(),
+            'team_id' => $this->getRequestTeam($request),
+            'ip' => $request->ip(),
+            'method' => $request->getMethod(),
+            'route' => $request->route()->getName(),
+            'status' => $response->getStatusCode(),
+        ], [
+            'counter' => 0,
+        ])->increment('counter')->save();
+    }
+
+    protected function getRequestTeam(Request $request): ?Model
+    {
+        return $request->route('team', optional($request->user())->currentTeam);
+    }
+
+    protected function getLoggableResponseContent(\Symfony\Component\HttpFoundation\Response $response): array
+    {
+        $content = $response->getContent();
+
+        if (is_string($content)) {
+            if (is_array(json_decode($content, true)) &&
+                json_last_error() === JSON_ERROR_NONE) {
+                return $this->contentWithinLimits($content)
+                    ? $this->getFiltered(json_decode($content, true))
+                    : ['Purged By bilfeldt/laravel-request-logger'];
+            }
+
+            if (Str::startsWith(strtolower($response->headers->get('Content-Type')), 'text/plain')) {
+                return $this->contentWithinLimits($content) ? [$content] : ['purge' => 'bilfeldt/laravel-request-logger'];
+            }
+        }
+
+        if ($response instanceof RedirectResponse) {
+            return ['redirect' => $response->getTargetUrl()];
+        }
+
+        if ($response instanceof Response && $response->getOriginalContent() instanceof View) {
+            return [
+                'view' => $response->getOriginalContent()->getPath(),
+                //'data' => $this->extractDataFromView($response->getOriginalContent()),
+            ];
+        }
+
+        return ['html' => 'non-json'];
+    }
+
+    protected function contentWithinLimits(string $content): bool
+    {
+        return intdiv(mb_strlen($content), 1000) <= 64;
+    }
+
+    protected function getFiltered(array $data)
+    {
+        return $this->replaceParameters($data, RequestLoggerFacade::getFilters());
+    }
+
+    protected function replaceParameters(array $array, array $hidden, string $value = '********'): array
+    {
+        foreach ($hidden as $parameter) {
+            if (Arr::get($array, $parameter)) {
+                Arr::set($array, $parameter, '********');
+            }
+        }
+
+        return $array;
+    }
+}

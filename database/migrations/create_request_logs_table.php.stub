@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('request_logs', function (Blueprint $table) {
+            $table->id();
+            $table->uuid('uuid')->nullable()->unique();
+            $table->foreignId('user_id')->nullable(); //->constrained()->cascadeOnDelete();
+            $table->foreignId('team_id')->nullable(); //->constrained()->cascadeOnDelete();
+            $table->ipAddress('ip')->nullable();
+            $table->string('session')->nullable();
+            $table->unsignedSmallInteger('status')->nullable();
+            $table->string('method')->nullable();
+            $table->text('route')->nullable(); // Not all routes needs to have a name
+            $table->text('path')->nullable();
+            $table->json('headers')->nullable();
+            $table->json('payload')->nullable();
+            $table->json('response_headers')->nullable();
+            $table->json('response_body')->nullable();
+            $table->unsignedMediumInteger('time')->nullable(); // ms
+            $table->float('memory')->nullable(); // MB
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('request_logs');
+    }
+};
