@@ -12,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -66,7 +67,7 @@ class RequestLog extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo('App\\Models\\User');
+        return $this->belongsTo(config('auth.providers.users.model'));
     }
 
     public function team(): BelongsTo
@@ -85,7 +86,7 @@ class RequestLog extends Model
      */
     public function prunable()
     {
-        return static::where('created_at', '<=', now()->subDays(config('request-logger.drivers.model.prune')));
+        return static::where('created_at', '<=', Date::now()->subDays(config('request-logger.drivers.model.prune')));
     }
 
     // TODO: The response can be either of Illuminate\Http\Response|Illuminate\Http\RedirectResponse
