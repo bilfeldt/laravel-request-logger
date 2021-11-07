@@ -2,9 +2,9 @@
 
 namespace Bilfeldt\RequestLogger\Tests;
 
+use Bilfeldt\RequestLogger\RequestLoggerServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Bilfeldt\RequestLogger\RequestLoggerServiceProvider;
 
 class TestCase extends Orchestra
 {
