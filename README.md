@@ -1,29 +1,11 @@
-# Log Laravel application request and responses for debugging or statistics
+# Flexible and extendable logging of Laravel application request and responses
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/bilfeldt/laravel-request-logger.svg?style=flat-square)](https://packagist.org/packages/bilfeldt/laravel-request-logger)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/bilfeldt/laravel-request-logger/run-tests?label=tests)](https://github.com/bilfeldt/laravel-request-logger/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/bilfeldt/laravel-request-logger/Check%20&%20fix%20styling?label=code%20style)](https://github.com/bilfeldt/laravel-request-logger/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/bilfeldt/laravel-request-logger.svg?style=flat-square)](https://packagist.org/packages/bilfeldt/laravel-request-logger)
 
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
-
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this laravel-request-logger
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files
-3. Remove this block of text.
-4. Have fun creating your package.
-5. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-request-logger.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-request-logger)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Zero configuration logging of Requests and Responses to database or custom drivers in Laravel applications - no more issues debugging customer support requests.
 
 ## Installation
 
@@ -45,18 +27,98 @@ You can publish the config file with:
 php artisan vendor:publish --provider="Bilfeldt\RequestLogger\RequestLoggerServiceProvider" --tag="laravel-request-logger-config"
 ```
 
-This is the contents of the published config file:
+## Usage
+
+It is possible to enable logging of all or some requests conditionally using one of the approaches below.
+
+### Enable log via middleware (Recommended)
+
+This package comes with a convenient middleware that can be used to enable logging of requests.
+
+Start by adding the middleware to the `$routeMiddleware` array in `app/Http/Kernel.php`:
 
 ```php
-return [
+// Within App\Http\Kernel class...
+
+protected $routeMiddleware = [
+    'auth' => \App\Http\Middleware\Authenticate::class,
+    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+    'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+    'can' => \Illuminate\Auth\Middleware\Authorize::class,
+    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+    'requestlog' => \Bilfeldt\RequestLogger\Middleware\LogRequestMiddleware::class, // <----- Added here
+    'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
+    'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+    'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 ];
 ```
 
-## Usage
+and then simply register the middleware on the routes (or route groups) you wish to log:
 
 ```php
-$laravel-request-logger = new Bilfeldt\RequestLogger();
-echo $laravel-request-logger->echoPhrase('Hello, Bilfeldt!');
+Route::middleware('requestlog')->get('/', function () {
+    return 'Hello World';
+});
+```
+
+### Enable via config file
+
+The config file includes some convenient settings for enabling logging of all or some requests:
+
+```php
+// Enable all requests:
+'log_methods' => ['*'],
+
+// or enable all server errors
+'log_statuses' => ['5**'],
+```
+
+### Enable log via request
+
+This package adds a macro on the `Request` class making it possible to enable logging directly from the request:
+
+```php
+/**
+ * Index posts.
+ *
+ * @param  Request  $request
+ * @return Response
+ */
+public function index(Request $request)
+{
+    $request->enableLog();
+
+    //
+}
+```
+
+### Drivers
+
+This package implements the [Laravel Manager Class](https://inspector.dev/how-to-extend-laravel-with-driver-based-services/) making it possible to easily register custom drivers either in your application or by third party packages.
+
+An `example` driver can be specified as middleware parameters:
+
+```php
+Route::middleware('log:example')->get('/', function () {
+    return 'Hello World';
+});
+```
+
+or via request macro:
+
+```php
+$request->enableLog('example');
+```
+
+### Unique Request UUID
+
+This package adds a macro `getUniqueId()` for the `Request` which generates a unique request UUID that will be saved to the logs and that can be included as [Global Log Context](https://laravel.com/docs/8.x/logging#contextual-information) which will pass it onto any application logging or error reporting. This id will per default also be added as a custom response header.
+
+**This is an extremely helpful trick when debugging customer requests as both customer, application logs, reported errors and request logs (this package) now all include a single common UUID!**
+
+```php
+$request->getUniqueId(); // Example: 94d0e2d6-4cc6-449c-9140-80bca47d29b4
 ```
 
 ## Testing
