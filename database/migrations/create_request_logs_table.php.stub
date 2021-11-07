@@ -26,6 +26,10 @@ return new class extends Migration
             $table->unsignedMediumInteger('time')->nullable(); // ms
             $table->float('memory')->nullable(); // MB
             $table->timestamps();
+
+            $table->index('uuid');
+            $table->index('created_at'); // Used for pruning
+            $table->index(['user_id', 'created_at']);
         });
     }
 
