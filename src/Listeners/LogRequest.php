@@ -17,7 +17,7 @@ class LogRequest
         $time = $startTime ? floor((microtime(true) - $startTime) * 1000) : null;
         $memory = memory_get_peak_usage(true);
 
-        if ($this->shouldLog($event->request, $event->response,)) {
+        if ($this->shouldLog($event->request, $event->response, )) {
             $event->request->enableLog();
         }
 
@@ -45,7 +45,7 @@ class LogRequest
             return true;
         }
 
-       if ($this->enabledStatus($response)) {
+        if ($this->enabledStatus($response)) {
             return true;
         }
 
@@ -63,7 +63,7 @@ class LogRequest
             return false;
         }
 
-        return (new CrawlerDetect)->isCrawler();
+        return (new CrawlerDetect())->isCrawler();
     }
 
     protected function enabledMethod(Request $request): bool
