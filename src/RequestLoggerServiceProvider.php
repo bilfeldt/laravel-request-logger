@@ -2,6 +2,7 @@
 
 namespace Bilfeldt\RequestLogger;
 
+use Bilfeldt\RequestLogger\Commands\RequestLogPruneCommand;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -22,7 +23,8 @@ class RequestLoggerServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-request-logger')
             ->hasConfigFile()
-            ->hasMigration('create_request_logs_table');
+            ->hasMigration('create_request_logs_table')
+            ->hasCommand(RequestLogPruneCommand::class);
     }
 
     public function packageRegistered()
