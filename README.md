@@ -33,28 +33,7 @@ It is possible to enable logging of all or some requests conditionally using one
 
 ### Enable log via middleware (Recommended)
 
-This package comes with a convenient middleware that can be used to enable logging of requests.
-
-Start by adding the middleware to the `$routeMiddleware` array in `app/Http/Kernel.php`:
-
-```php
-// Within App\Http\Kernel class...
-
-protected $routeMiddleware = [
-    'auth' => \App\Http\Middleware\Authenticate::class,
-    'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-    'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-    'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-    'can' => \Illuminate\Auth\Middleware\Authorize::class,
-    'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-    'requestlog' => \Bilfeldt\RequestLogger\Middleware\LogRequestMiddleware::class, // <----- Added here
-    'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
-    'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-    'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-];
-```
-
-and then simply register the middleware on the routes (or route groups) you wish to log:
+This package comes with a convenient `requestlog` middleware that can be used to enable logging of request by simply register the middleware on the routes (or route groups) you wish to log:
 
 ```php
 Route::middleware('requestlog')->get('/', function () {
