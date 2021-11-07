@@ -51,6 +51,7 @@ return [
         'telescope-api*',
         'horizon*',
         'nova-api*',
+        'livewire*',
     ],
     'disable_robots_tracking' => false, // require 'jaybizzle/crawler-detect' to be installed
 
