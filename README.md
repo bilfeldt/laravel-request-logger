@@ -126,10 +126,10 @@ $request->getUniqueId(); // Example: 94d0e2d6-4cc6-449c-9140-80bca47d29b4
 The number of logged requests can quickly grow if you are not pruning the logs regularly. In order to keep the logs manageable, you can use the `prune` command to remove old logs as [described in the Laravel Docs](https://laravel.com/docs/8.x/eloquent#pruning-models):
 
 ```php
-$schedule->command('model:prune', [
-    '--model' => [\Bilfeldt\RequestLogger\Models\RequestLog::class],
-])->daily();
+$schedule->command('requestlog:prune')->daily();
 ```
+
+Note that the default `RequestLog` model setup by this package will not be discovered as a "Prunable" model by Laravel default `model:prune` command as it does not reside in the `app/Models` directory. If you change this class in the configuration to a custom class this will be auto registered and the command above will be needless.
 
 ## Testing
 
