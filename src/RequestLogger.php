@@ -2,7 +2,7 @@
 
 namespace Bilfeldt\RequestLogger;
 
-use Bilfeldt\RequestLogger\Loggers\ModelLogger;
+use Bilfeldt\RequestLogger\Contracts\RequestLoggerInterface;
 use Illuminate\Support\Manager;
 
 class RequestLogger extends Manager
@@ -24,10 +24,13 @@ class RequestLogger extends Manager
         return config('request-logger.default');
     }
 
-    public function createModelDriver(): ModelLogger
+    public function createNullDriver(): NullLogger
     {
-        $class = config('request-logger.drivers.model.class');
+        return new NullLogger();
+    }
 
-        return new ModelLogger(new $class());
+    public function createModelDriver(): RequestLoggerInterface
+    {
+        return new (config('request-logger.drivers.model.class'));
     }
 }

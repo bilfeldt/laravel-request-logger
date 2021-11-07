@@ -1,6 +1,6 @@
 <?php
 
-namespace Bilfeldt\RequestLogger\Loggers;
+namespace Bilfeldt\RequestLogger;
 
 use Bilfeldt\RequestLogger\Contracts\RequestLoggerInterface;
 use Illuminate\Http\Request;

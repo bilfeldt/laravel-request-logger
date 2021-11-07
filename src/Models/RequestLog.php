@@ -2,6 +2,8 @@
 
 namespace Bilfeldt\RequestLogger\Models;
 
+use Bilfeldt\RequestLogger\Contracts\RequestLoggerInterface;
+use Bilfeldt\RequestLogger\Database\Factories\RequestLogFactory;
 use Bilfeldt\RequestLogger\RequestLoggerFacade;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,7 +18,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-class RequestLog extends Model
+class RequestLog extends Model implements RequestLoggerInterface
 {
     use HasFactory;
     use MassPrunable;
@@ -137,7 +139,15 @@ class RequestLog extends Model
 
     protected function getRequestTeam(Request $request): ?Model
     {
-        return $request->route('team', optional($request->user())->currentTeam);
+        if ($request->route('team') instanceof Model) {
+            return $request->route('team');
+        }
+
+        if ($user = $request->user()) {
+            return method_exists($user, 'currentTeam') ? $user->currentTeam : null;
+        }
+
+        return null;
     }
 
     protected function getLoggableResponseContent(\Symfony\Component\HttpFoundation\Response $response): array
@@ -190,5 +200,10 @@ class RequestLog extends Model
         }
 
         return $array;
+    }
+
+    protected static function newFactory()
+    {
+        return RequestLogFactory::new();
     }
 }

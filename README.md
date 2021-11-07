@@ -15,7 +15,7 @@ You can install the package via composer:
 composer require bilfeldt/laravel-request-logger
 ```
 
-You can publish and run the migrations with:
+Publish and run the migrations with:
 
 ```bash
 php artisan vendor:publish --provider="Bilfeldt\RequestLogger\RequestLoggerServiceProvider" --tag="request-logger-migrations"
