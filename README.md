@@ -110,6 +110,12 @@ $schedule->command('requestlog:prune')->daily();
 
 Note that the default `RequestLog` model setup by this package will not be discovered as a "Prunable" model by Laravel default `model:prune` command as it does not reside in the `app/Models` directory. If you change this class in the configuration to a custom class this will be auto registered and the command above will be needless.
 
+## Notes and advises
+
+### Proxies and load balancers
+
+When using proxies and/or load balancers then the IP address of the proxy/load balancer must be listed as a [Trusted Proxy](https://laravel.com/docs/8.x/requests#configuring-trusted-proxies) for the users IP address to be correctly logged as the IP of the proxy itself will be logged otherwise.
+
 ## Testing
 
 ```bash
