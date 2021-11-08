@@ -10,7 +10,8 @@ use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * This class is highly inspired by the Laravel Telescope Request Watcher
+ * This class is highly inspired by the Laravel Telescope Request Watcher.
+ *
  * @see https://github.com/laravel/telescope/blob/master/src/Watchers/RequestWatcher.php
  */
 class LogRequest
@@ -63,7 +64,7 @@ class LogRequest
 
     protected function disabledRobot(Request $request): bool
     {
-        if (! config('request-logger.disable_robots_tracking')) {
+        if (!config('request-logger.disable_robots_tracking')) {
             return false;
         }
 

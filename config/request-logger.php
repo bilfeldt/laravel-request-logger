@@ -1,4 +1,5 @@
 <?php
+
 // config for Bilfeldt/RequestLogger
 return [
     /*
@@ -32,20 +33,20 @@ return [
     |
     */
     'log_methods' => [
-//        '*',
-//        'GET',
-//        'HEAD',
-//        'POST',
-//        'PUT',
-//        'DELETE',
-//        'PATCH',
+        //        '*',
+        //        'GET',
+        //        'HEAD',
+        //        'POST',
+        //        'PUT',
+        //        'DELETE',
+        //        'PATCH',
     ],
     'log_statuses' => [
-//        '*',
-//        '5**',
-//        '4**',
-//        '3**',
-//        '2**',
+        //        '*',
+        //        '5**',
+        //        '4**',
+        //        '3**',
+        //        '2**',
     ],
     'ignore_paths' => [
         'telescope-api*',

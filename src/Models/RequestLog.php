@@ -44,12 +44,11 @@ class RequestLog extends Model implements RequestLoggerInterface
     ];
 
     protected $casts = [
-        'headers' => 'json',
-        'payload' => 'json',
+        'headers'          => 'json',
+        'payload'          => 'json',
         'response_headers' => 'json',
-        'response_body' => 'json',
+        'response_body'    => 'json',
     ];
-
 
     //======================================================================
     // ACCESSORS
@@ -128,10 +127,10 @@ class RequestLog extends Model implements RequestLoggerInterface
             //'date' => null,//(string) $date,
             'user_id' => optional($request->user())->getKey(),
             'team_id' => $this->getRequestTeam($request),
-            'ip' => $request->ip(),
-            'method' => $request->getMethod(),
-            'route' => $request->route()->getName(),
-            'status' => $response->getStatusCode(),
+            'ip'      => $request->ip(),
+            'method'  => $request->getMethod(),
+            'route'   => $request->route()->getName(),
+            'status'  => $response->getStatusCode(),
         ], [
             'counter' => 0,
         ])->increment('counter')->save();
