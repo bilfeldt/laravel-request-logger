@@ -131,6 +131,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## Credits
 
 - [Anders Bilfeldt](https://github.com/bilfeldt)
+- [Laravel Telescope](https://github.com/laravel/telescope/blob/master/src/Watchers/RequestWatcher.php): Collection of data from request/response is almost entirely taken from this package.
 - [All Contributors](../../contributors)
 
 ## License

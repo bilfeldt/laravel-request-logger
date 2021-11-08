@@ -9,6 +9,10 @@ use Illuminate\Support\Str;
 use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * This class is highly inspired by the Laravel Telescope Request Watcher
+ * @see https://github.com/laravel/telescope/blob/master/src/Watchers/RequestWatcher.php
+ */
 class LogRequest
 {
     public function handle(RequestHandled $event)
@@ -17,7 +21,7 @@ class LogRequest
         $time = $startTime ? floor((microtime(true) - $startTime) * 1000) : null;
         $memory = memory_get_peak_usage(true);
 
-        if ($this->shouldLog($event->request, $event->response, )) {
+        if ($this->shouldLog($event->request, $event->response)) {
             $event->request->enableLog();
         }
 

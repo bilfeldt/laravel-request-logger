@@ -31,6 +31,6 @@ class RequestLogger extends Manager
 
     public function createModelDriver(): RequestLoggerInterface
     {
-        return new (config('request-logger.drivers.model.class'));
+        return new config('request-logger.drivers.model.class');
     }
 }
