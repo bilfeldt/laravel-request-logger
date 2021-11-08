@@ -4,8 +4,3 @@ php:
   finder:
     not-name:
       - Enums.php
-js:
-  finder:
-    not-name:
-      - webpack.mix.js
-css: true
