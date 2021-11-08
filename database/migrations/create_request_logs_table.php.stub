@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->nullable()->unique();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->unsignedBigInteger('team_id')->nullable(); // Can be changed to the following if your application uses teams: $table->foreignId('user_id')->nullable()->constrained();
+            $table->unsignedBigInteger('team_id')->nullable(); // Can be changed to the following if your application uses teams: $table->foreignId('team_id')->nullable()->constrained();
             $table->ipAddress('ip')->nullable();
             $table->string('session')->nullable();
             $table->unsignedSmallInteger('status')->nullable();

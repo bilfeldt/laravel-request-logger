@@ -91,7 +91,7 @@ class RequestLog extends Model implements RequestLoggerInterface
         return static::where('created_at', '<=', Date::now()->subDays(config('request-logger.drivers.model.prune')));
     }
 
-    // TODO: The response can be either of Illuminate\Http\Response|Illuminate\Http\RedirectResponse
+    /** @inerhitDoc */
     public function log(Request $request, $response, ?int $time = null, ?int $memory = null): void
     {
         $model = new static();

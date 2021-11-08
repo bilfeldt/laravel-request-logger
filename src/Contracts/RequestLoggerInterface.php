@@ -7,9 +7,15 @@ use Illuminate\Http\Response;
 
 interface RequestLoggerInterface
 {
+    /**
+     * @param Request $request
+     * @param \Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response  $response
+     * @param int|null $time
+     * @param int|null $memory
+     */
     public function log(
         Request $request,
-        $response, // TODO: Response can be either Illuminate\Http\Response|Illuminate\Http\RedirectResponse
+        $response,
         ?int $time = null,
         ?int $memory = null
     ): void;

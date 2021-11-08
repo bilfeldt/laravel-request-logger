@@ -4,7 +4,7 @@ namespace Bilfeldt\RequestLogger\Commands;
 
 use Illuminate\Console\Command;
 
-class RequestLogPruneCommand extends Command
+class PruneRequestLogsCommand extends Command
 {
     public $signature = 'requestlog:prune';
 
