@@ -4,11 +4,8 @@ namespace Bilfeldt\RequestLogger;
 
 use Bilfeldt\RequestLogger\Commands\RequestLogPruneCommand;
 use Bilfeldt\RequestLogger\Middleware\LogRequestMiddleware;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;

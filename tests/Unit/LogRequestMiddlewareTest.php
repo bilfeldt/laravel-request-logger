@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Config;
 
 class LogRequestMiddlewareTest extends TestCase
 {
-    function test_adds_default_driver()
+    public function test_adds_default_driver()
     {
         $request = new Request();
 
@@ -22,7 +22,7 @@ class LogRequestMiddlewareTest extends TestCase
         $this->assertContains(config('request-logger.default'), $request->attributes->get('log'));
     }
 
-    function test_adds_specified_drivers()
+    public function test_adds_specified_drivers()
     {
         $request = new Request();
 
@@ -35,7 +35,7 @@ class LogRequestMiddlewareTest extends TestCase
         $this->assertContains('driver2', $request->attributes->get('log'));
     }
 
-    function test_adds_unique_uuid_to_response_header()
+    public function test_adds_unique_uuid_to_response_header()
     {
         $this->assertEquals('Request-Id', config('request-logger.header'));
 
@@ -57,7 +57,7 @@ class LogRequestMiddlewareTest extends TestCase
         $this->assertEquals($request->getUniqueId(), $response2->headers->get('test-header'));
     }
 
-    function test_adds_log_context()
+    public function test_adds_log_context()
     {
         // Test that $request->getUniqueId() is added to the global log context when config('request-logger.header')
 
