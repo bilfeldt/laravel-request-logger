@@ -64,7 +64,7 @@ class LogRequest
 
     protected function disabledRobot(Request $request): bool
     {
-        if (! config('request-logger.disable_robots_tracking')) {
+        if (!config('request-logger.disable_robots_tracking')) {
             return false;
         }
 
