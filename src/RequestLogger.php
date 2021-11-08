@@ -33,6 +33,6 @@ class RequestLogger extends Manager
     {
         $model = config('request-logger.drivers.model.class');
 
-        return new $model;
+        return new $model();
     }
 }

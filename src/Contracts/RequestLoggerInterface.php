@@ -3,7 +3,6 @@
 namespace Bilfeldt\RequestLogger\Contracts;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 interface RequestLoggerInterface
 {
