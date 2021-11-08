@@ -50,7 +50,6 @@ class RequestLog extends Model implements RequestLoggerInterface
         'response_body' => 'json',
     ];
 
-
     //======================================================================
     // ACCESSORS
     //======================================================================
