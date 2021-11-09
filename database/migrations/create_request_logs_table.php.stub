@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('team_id')->nullable(); // Can be changed to the following if your application uses teams: $table->foreignId('team_id')->nullable()->constrained();
             $table->ipAddress('ip')->nullable();
             $table->string('session')->nullable();
+            $table->json('middleware')->nullable();
             $table->unsignedSmallInteger('status')->nullable();
             $table->string('method')->nullable();
             $table->string('route')->nullable(); // Not all routes needs to have a name
