@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class NullLogger implements RequestLoggerInterface
 {
-    public function log(Request $request, $response, ?int $time = null, ?int $memory = null): void
+    /** @inheritDoc */
+    public function log(Request $request, $response, ?int $duration = null, ?int $memory = null): void
     {
         // Intentionally left blank.
     }
