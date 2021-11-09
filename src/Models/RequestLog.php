@@ -31,6 +31,7 @@ class RequestLog extends Model implements RequestLoggerInterface
     protected $fillable = [
         'ip',
         'session',
+        'middleware',
         'status',
         'method',
         'route',
@@ -44,6 +45,7 @@ class RequestLog extends Model implements RequestLoggerInterface
     ];
 
     protected $casts = [
+        'middleware' => 'json',
         'headers' => 'json',
         'payload' => 'json',
         'response_headers' => 'json',
@@ -98,6 +100,7 @@ class RequestLog extends Model implements RequestLoggerInterface
         $model->uuid = $request->getUniqueId();
         $model->ip = $request->ip();
         $model->session = $request->hasSession() ? $request->session()->getId() : null;
+        $model->middleware = array_values(optional($request->route())->gatherMiddleware() ?? []);
         $model->method = $request->getMethod();
         $model->route = $request->route()->getName();
         $model->path = $request->path();
