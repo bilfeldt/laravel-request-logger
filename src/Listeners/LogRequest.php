@@ -19,7 +19,7 @@ class LogRequest
     public function handle(RequestHandled $event)
     {
         $startTime = defined('LARAVEL_START') ? LARAVEL_START : $event->request->server('REQUEST_TIME_FLOAT');
-        $time = $startTime ? floor((microtime(true) - $startTime) * 1000) : null;
+        $duration = $startTime ? floor((microtime(true) - $startTime) * 1000) : null;
         $memory = memory_get_peak_usage(true);
 
         if ($this->shouldLog($event->request, $event->response)) {
@@ -30,7 +30,7 @@ class LogRequest
             RequestLoggerFacade::driver($driver)->log(
                 $event->request,
                 $event->response,
-                $time,
+                $duration,
                 $memory
             );
         }

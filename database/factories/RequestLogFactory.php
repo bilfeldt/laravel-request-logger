@@ -24,7 +24,7 @@ class RequestLogFactory extends Factory
             'payload' => $this->getPayload(),
             'response_headers' => $this->getHeaders(),
             'response_body' => $this->faker->sentence(),
-            'time' => $this->faker->numberBetween(100, 30000),
+            'duration' => $this->faker->numberBetween(100, 30000),
             'memory' => $this->faker->randomFloat(1, 1, 100),
         ];
     }

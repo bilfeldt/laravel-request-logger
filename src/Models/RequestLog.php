@@ -40,7 +40,7 @@ class RequestLog extends Model implements RequestLoggerInterface
         'payload',
         'response_headers',
         'response_body',
-        'time',
+        'duration',
         'memory',
     ];
 
@@ -93,7 +93,7 @@ class RequestLog extends Model implements RequestLoggerInterface
     }
 
     /** @inerhitDoc */
-    public function log(Request $request, $response, ?int $time = null, ?int $memory = null): void
+    public function log(Request $request, $response, ?int $duration = null, ?int $memory = null): void
     {
         $model = new static();
 
@@ -109,7 +109,7 @@ class RequestLog extends Model implements RequestLoggerInterface
         $model->payload = $this->getFiltered($request->input()) ?: null;
         $model->response_headers = $this->getFiltered($response->headers->all()) ?: null;
         $model->response_body = $this->getLoggableResponseContent($response);
-        $model->time = $time;
+        $model->duration = $duration;
         $model->memory = round($memory / 1024 / 1024, 2); // [MB]
 
         if ($user = $request->user()) {

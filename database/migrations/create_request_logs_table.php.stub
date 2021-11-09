@@ -24,7 +24,7 @@ return new class extends Migration
             $table->json('payload')->nullable();
             $table->json('response_headers')->nullable();
             $table->json('response_body')->nullable();
-            $table->unsignedMediumInteger('time')->nullable(); // ms
+            $table->unsignedMediumInteger('duration')->nullable(); // ms
             $table->float('memory')->nullable(); // MB
             $table->timestamps();
 
