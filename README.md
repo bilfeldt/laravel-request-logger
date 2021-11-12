@@ -35,7 +35,7 @@ It is possible to enable logging of all or some requests conditionally using one
 
 ### Enable log via middleware (Recommended)
 
-This package comes with a convenient `requestlog` middleware that can be used to enable logging of request by simply register the middleware on the routes (or route groups) you wish to log:
+This package comes with a convenient `requestlog` middleware that can be used to enable logging of request by simply registering the middleware on the routes (or route groups) you wish to log:
 
 ```php
 Route::middleware('requestlog')->get('/', function () {
@@ -57,7 +57,7 @@ The config file includes some convenient settings for enabling logging of all or
 
 ### Enable log via request
 
-This package adds a macro on the `Request` class making it possible to enable logging directly from the request:
+This package adds a macro on the `Illuminate\Http\Request` class making it possible to enable logging directly from the request:
 
 ```php
 /**
@@ -76,7 +76,7 @@ public function index(Request $request)
 
 ### Unique Request UUID
 
-This package adds a macro `getUniqueId()` for the `Request` which generates a unique request UUID that will be saved to the logs and that can be included as [Global Log Context](https://laravel.com/docs/8.x/logging#contextual-information) which will pass it onto any application logging or error reporting. This id will per default also be added as a custom response header.
+This package adds a macro `getUniqueId()` for the `Illuminate\Http\Request` class which generates a unique request UUID that will be saved to the logs and that can be included as [Global Log Context](https://laravel.com/docs/8.x/logging#contextual-information) which will pass it onto any application logging or error reporting. This id will per default also be added as a custom response header.
 
 **This is an extremely helpful trick when debugging customer requests as both customer, application logs, reported errors and request logs (this package) now all include a single common UUID!**
 
