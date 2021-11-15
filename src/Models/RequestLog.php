@@ -102,7 +102,7 @@ class RequestLog extends Model implements RequestLoggerInterface
         $model->session = $request->hasSession() ? $request->session()->getId() : null;
         $model->middleware = array_values(optional($request->route())->gatherMiddleware() ?? []);
         $model->method = $request->getMethod();
-        $model->route = optional($request->route())->getName() ?? optional($request->route())->uri(), // Note that $request->route()->uri() does not replace the placeholders while $request->getRequestUri() replaces the placeholders
+        $model->route = optional($request->route())->getName() ?? optional($request->route())->uri(); // Note that $request->route()->uri() does not replace the placeholders while $request->getRequestUri() replaces the placeholders
         $model->path = $request->path();
         $model->status = $response->getStatusCode();
         $model->headers = $this->getFiltered($request->headers->all()) ?: null;
