@@ -102,7 +102,7 @@ class RequestLog extends Model implements RequestLoggerInterface
         $model->session = $request->hasSession() ? $request->session()->getId() : null;
         $model->middleware = array_values(optional($request->route())->gatherMiddleware() ?? []);
         $model->method = $request->getMethod();
-        $model->route = $request->route()->getName();
+        $model->route = $request->route()?->getName();
         $model->path = $request->path();
         $model->status = $response->getStatusCode();
         $model->headers = $this->getFiltered($request->headers->all()) ?: null;
