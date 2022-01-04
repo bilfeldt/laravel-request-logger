@@ -30,7 +30,7 @@ return [
         'version' => [
             'name' => env('REQUEST_LOGGER_VERSION_HEADER', 'App-Version'),
             'value' => fn () => gethostname(),
-        ]
+        ],
     ],
 
 

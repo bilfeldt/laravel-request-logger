@@ -48,7 +48,7 @@ class LogRequestMiddlewareTest extends TestCase
         $this->assertFalse($response1->headers->has('test-header'));
 
         Config::set('request-logger.headers.header.name', 'test-header');
-        Config::set('request-logger.headers.header.value', fn() => isset($request)?$request->getUniqueId():null);
+        Config::set('request-logger.headers.header.value', fn () => isset($request) ? $request->getUniqueId() : null);
 
         $response2 = (new LogRequestMiddleware())->handle($request, function ($request) {
             return new Response();
