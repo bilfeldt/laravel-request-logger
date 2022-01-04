@@ -37,7 +37,7 @@ class LogRequestMiddlewareTest extends TestCase
 
     public function test_adds_unique_uuid_to_response_header()
     {
-        $this->assertEquals('Request-Id', config('request-logger.header'));
+        $this->assertEquals('Request-Id', config('request-logger.headers.header.name'));
 
         $request = new Request();
 
@@ -47,14 +47,30 @@ class LogRequestMiddlewareTest extends TestCase
 
         $this->assertFalse($response1->headers->has('test-header'));
 
-        Config::set('request-logger.header', 'test-header');
+        Config::set('request-logger.headers.header.name', 'test-header');
+        Config::set('request-logger.headers.header.value', fn() => isset($request)?$request->getUniqueId():null);
 
         $response2 = (new LogRequestMiddleware())->handle($request, function ($request) {
             return new Response();
         });
 
         $this->assertTrue($response2->headers->has('test-header'));
+
         $this->assertEquals($request->getUniqueId(), $response2->headers->get('test-header'));
+    }
+
+    public function test_has_app_version_header() {
+        $request = new Request();
+
+        $response1 = (new LogRequestMiddleware())->handle($request, function ($request) {
+            return new Response();
+        });
+
+        $this->assertTrue($response1->headers->has('app-version'));
+        $this->assertEquals(
+            $response1->headers->get('app-version'),
+            value(config('request-logger.headers.version.value'))
+        );
     }
 
     public function test_adds_log_context()

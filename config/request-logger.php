@@ -22,7 +22,17 @@ return [
     | headers using the specified key.
     |
     */
-    'header' => env('REQUEST_LOGGER_HEADER', 'Request-Id'), // null means disabled
+    'headers' => [
+        'header' => [
+            'name' => env('REQUEST_LOGGER_HEADER', 'Request-Id'), // null means disabled,
+            'value' => fn() => isset($request)?$request->getUniqueId():null,
+        ],
+        'version' => [
+            'name' => env('REQUEST_LOGGER_VERSION_HEADER', 'App-Version'),
+            'value' => fn() => gethostname(),
+        ]
+    ],
+
 
     /*
     |--------------------------------------------------------------------------

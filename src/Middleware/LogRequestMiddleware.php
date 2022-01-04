@@ -4,6 +4,7 @@ namespace Bilfeldt\RequestLogger\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class LogRequestMiddleware
@@ -29,8 +30,12 @@ class LogRequestMiddleware
 
         $response = $next($request);
 
-        if ($header = config('request-logger.header')) {
-            $response->headers->set($header, $requestId, true); // This is available on all Response types whereas $request->header() is only available in \Illuminate\Http\Response
+        // Headers are available to Response types whereas $request->header() is only available in \Illuminate\Http\Response
+        foreach (config('request-logger.headers') as $header) {
+            if ($header_name = Arr::get($header, 'name')) {
+                // key 'value' can be a \Closure or any other type of value
+                $response->headers->set($header_name, value(Arr::get($header, 'value')), true);
+            }
         }
 
         return $response;
