@@ -59,7 +59,8 @@ class LogRequestMiddlewareTest extends TestCase
         $this->assertEquals($request->getUniqueId(), $response2->headers->get('test-header'));
     }
 
-    public function test_has_app_version_header() {
+    public function test_has_app_version_header()
+    {
         $request = new Request();
 
         $response1 = (new LogRequestMiddleware())->handle($request, function ($request) {
