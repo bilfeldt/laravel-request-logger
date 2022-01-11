@@ -96,6 +96,7 @@ return [
         'password',
         'password_confirm',
         'apikey',
+        'api_token',
         'Authorization',
         'filter.search',
     ],
