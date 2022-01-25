@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('status')->nullable();
             $table->string('method')->nullable();
             $table->string('route')->nullable(); // Not all routes needs to have a name
-            $table->string('path')->nullable();
+            $table->text('path')->nullable();
             $table->json('headers')->nullable();
             $table->json('payload')->nullable();
             $table->json('response_headers')->nullable();
