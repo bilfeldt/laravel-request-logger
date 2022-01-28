@@ -2,7 +2,7 @@
 
 All notable changes to `laravel-request-logger` will be documented in this file.
 
-## v1.0.3 - 2022-01-28
+## v1.1.0 - 2022-01-28
 
 - Add Laravel 9 support
 - Add PHP 8.1 support
