@@ -8,6 +8,10 @@
     ],
     "homepage": "https://github.com/bilfeldt/laravel-request-logger",
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/bilfeldt/laravel-route-statistics/issues",
+        "source": "https://github.com/bilfeldt/laravel-route-statistics"
+    },
     "authors": [
         {
             "name": "Anders Bilfeldt",
