@@ -46,4 +46,4 @@ jobs:
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --dev
 
       - name: Execute tests
-        run: vendor/bin/pest
+        run: vendor/bin/phpunit
