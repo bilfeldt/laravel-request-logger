@@ -13,7 +13,7 @@ No breaking changes. The only changes are to the development dependencies used f
 ### 2.0.0 - 2023-05-01
 
 - Add support for PHP 8.2
-- Minimum PHP requirement 8.1
+- Minimum PHP requirement 8.2
 - Add support for Laravel 10.*
 - Minimum Laravel requirement 10.0
 
