@@ -9,6 +9,11 @@
 
 Zero configuration logging of Requests and Responses to database or custom drivers in Laravel applications - no more issues debugging customer support requests.
 
+| Version | Laravel     | PHP                     |
+|---------|-------------|-------------------------|
+| 1.*     | 8.* \| 9.*  | 7.4.* \| 8.0.* \| 8.1.* |
+| 2.*     | 10.*        | 8.2.*                   |
+
 ## Installation
 
 You can install the package via composer:
