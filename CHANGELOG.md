@@ -10,6 +10,10 @@ No breaking changes. The only changes are to the development dependencies used f
 
 ## Changes
 
+### 2.1.0 - 2023-07-24
+
+- Add support for PHP 8.1
+
 ### 2.0.0 - 2023-05-01
 
 - Add support for PHP 8.2
