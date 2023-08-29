@@ -9,17 +9,28 @@ use Illuminate\Http\Response;
 
 class CorrelationIdMiddlewareTest extends TestCase
 {
-    public function test_adds_response_header(): void
+    public function test_adds_request_header(): void
     {
-        $this->assertEquals('Correlation-ID', config('request-logger.header'));
-
         $request = new Request();
 
-        $response1 = (new CorrelationIdMiddleware())->handle($request, function ($request) {
+        (new CorrelationIdMiddleware())->handle($request, function ($request) {
+
+            $this->assertTrue($request->headers->has('Correlation-ID'));
+            $this->assertEquals($request, $request->header('Correlation-ID'));
+
+            return new Response();
+        });
+    }
+
+    public function test_adds_response_header(): void
+    {
+        $request = new Request();
+
+        $response = (new CorrelationIdMiddleware())->handle($request, function ($request) {
             return new Response();
         });
 
-        $this->assertTrue($response1->headers->has('Correlation-ID'));
-        $this->assertEquals($request->getUniqueId(), $response1->headers->get('Correlation-ID'));
+        $this->assertTrue($response->headers->has('Correlation-ID'));
+        $this->assertEquals($response, $request->header('Correlation-ID'));
     }
 }
