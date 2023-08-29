@@ -30,7 +30,7 @@ class LogRequestMiddleware
         $response = $next($request);
 
         if ($header = config('request-logger.header')) {
-            $response->headers->set($header, $requestId, true); // This is available on all Response types whereas $request->header() is only available in \Illuminate\Http\Response
+            $response->headers->set($header, $requestId, true); // This is available on all Response types whereas $response->header() is only available in \Illuminate\Http\Response
         }
 
         return $response;
