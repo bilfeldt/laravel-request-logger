@@ -16,7 +16,7 @@ class CorrelationIdMiddlewareTest extends TestCase
         (new CorrelationIdMiddleware())->handle($request, function ($request) {
 
             $this->assertTrue($request->headers->has('Correlation-ID'));
-            $this->assertEquals($request, $request->header('Correlation-ID'));
+            $this->assertEquals($request->getUniqueId(), $request->header('Correlation-ID'));
 
             return new Response();
         });
@@ -31,6 +31,6 @@ class CorrelationIdMiddlewareTest extends TestCase
         });
 
         $this->assertTrue($response->headers->has('Correlation-ID'));
-        $this->assertEquals($response, $request->header('Correlation-ID'));
+        $this->assertEquals($request->getUniqueId(), $request->header('Correlation-ID'));
     }
 }
