@@ -14,7 +14,6 @@ class CorrelationIdMiddlewareTest extends TestCase
         $request = new Request();
 
         (new CorrelationIdMiddleware())->handle($request, function ($request) {
-
             $this->assertTrue($request->headers->has('Correlation-ID'));
             $this->assertEquals($request->getUniqueId(), $request->header('Correlation-ID'));
 

@@ -31,5 +31,4 @@ class CorrelationIdMiddleware
     {
         return $request->getUniqueId();
     }
-
 }
