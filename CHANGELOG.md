@@ -10,6 +10,10 @@ No breaking changes. The only changes are to the development dependencies used f
 
 ## Changes
 
+### 2.2.0 - 2023-08-29
+
+- Add middleware for adding 'Correlation-ID' header to responses
+
 ### 2.1.0 - 2023-07-24
 
 - Add support for PHP 8.1
