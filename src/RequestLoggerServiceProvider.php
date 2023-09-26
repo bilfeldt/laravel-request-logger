@@ -47,14 +47,6 @@ class RequestLoggerServiceProvider extends PackageServiceProvider
 
     private function registerMacros(): void
     {
-        Request::macro('getUniqueId', function (): string {
-            if (! $this->attributes->has('uuid')) {
-                $this->attributes->set('uuid', (string) Str::orderedUuid());
-            }
-
-            return $this->attributes->get('uuid');
-        });
-
         Request::macro('enableLog', function (string ...$drivers): Request {
             $loggers = $this->attributes->get('log', []);
 
