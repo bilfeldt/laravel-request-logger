@@ -98,12 +98,14 @@ class RequestLog extends Model implements RequestLoggerInterface
         $model = new static();
 
         $model->uuid = $request->getUniqueId();
+        $model->correlation_id = $this->truncateToLength($request->correlationId());
+        $model->client_request_id = $this->truncateToLength($request->clientRequestId());
         $model->ip = $request->ip();
         $model->session = $request->hasSession() ? $request->session()->getId() : null;
         $model->middleware = array_values(optional($request->route())->gatherMiddleware() ?? []);
         $model->method = $request->getMethod();
-        $model->route = optional($request->route())->getName() ?? optional($request->route())->uri(); // Note that $request->route()->uri() does not replace the placeholders while $request->getRequestUri() replaces the placeholders
-        $model->path = $request->path();
+        $model->route = $this->truncateToLength(optional($request->route())->getName() ?? optional($request->route())->uri()); // Note that $request->route()->uri() does not replace the placeholders while $request->getRequestUri() replaces the placeholders
+        $model->path = $this->truncateToLength($request->path());
         $model->status = $response->getStatusCode();
         $model->headers = $this->getFiltered($request->headers->all()) ?: null;
         $model->payload = $this->getFiltered($request->input()) ?: null;
@@ -121,22 +123,6 @@ class RequestLog extends Model implements RequestLoggerInterface
         }
 
         $model->save();
-    }
-
-    public function aggregate(Request $request, $response, Carbon $date): void
-    {
-        static::firstOrNew([ // There should be a compound index with all these fields for performance
-            'uuid' => null, // This is required to prevent updating detailed records
-            //'date' => null,//(string) $date,
-            'user_id' => optional($request->user())->getKey(),
-            'team_id' => $this->getRequestTeam($request),
-            'ip' => $request->ip(),
-            'method' => $request->getMethod(),
-            'route' => $request->route()->getName(),
-            'status' => $response->getStatusCode(),
-        ], [
-            'counter' => 0,
-        ])->increment('counter')->save();
     }
 
     protected function getRequestTeam(Request $request): ?Model
@@ -202,6 +188,21 @@ class RequestLog extends Model implements RequestLoggerInterface
         }
 
         return $array;
+    }
+
+    protected function truncateToLength(?string $string, int $length = 255): ?string
+    {
+        if (! $string) {
+            return $string;
+        }
+
+        $truncator = '...';
+
+        if (mb_strwidth($string, 'UTF-8') <= $length) {
+            return $string;
+        }
+
+        return Str::limit($string, $length - mb_strwidth($truncator, 'UTF-8'), $truncator);
     }
 
     protected static function newFactory()
