@@ -98,8 +98,8 @@ class RequestLog extends Model implements RequestLoggerInterface
         $model = new static();
 
         $model->uuid = $request->getUniqueId();
-        $model->correlation_id = $this->truncateToLength($request->correlationId());
-        $model->client_request_id = $this->truncateToLength($request->clientRequestId());
+        $model->correlation_id = $this->truncateToLength($request->getCorrelationId());
+        $model->client_request_id = $this->truncateToLength($request->getClientRequestId());
         $model->ip = $request->ip();
         $model->session = $request->hasSession() ? $request->session()->getId() : null;
         $model->middleware = array_values(optional($request->route())->gatherMiddleware() ?? []);
