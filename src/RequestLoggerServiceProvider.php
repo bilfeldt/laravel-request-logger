@@ -28,11 +28,11 @@ class RequestLoggerServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/request-logger.php' => config_path('request-logger.php'),
-            ], 'config');
+            ], ['config', 'request-logger-config']);
 
             $this->publishes([
                 __DIR__.'/../database/migrations/' => database_path('migrations')
-            ], 'migrations');
+            ], ['migrations', 'request-logger-migrations']);
 
             $this->commands([
                 PruneRequestLogsCommand::class,
