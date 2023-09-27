@@ -31,7 +31,8 @@ class RequestLoggerServiceProvider extends ServiceProvider
             ], ['config', 'request-logger-config']);
 
             $this->publishes([
-                __DIR__.'/../database/migrations/' => database_path('migrations')
+                __DIR__.'/../database/migrations/create_request_logs_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_request_logs_table.php'),
+                // you can add any number of migrations here
             ], ['migrations', 'request-logger-migrations']);
 
             $this->commands([
