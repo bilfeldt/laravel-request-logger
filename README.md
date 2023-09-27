@@ -13,6 +13,7 @@ Zero configuration logging of Requests and Responses to database or custom drive
 |---------|-------------|-------------------------|
 | 1.*     | 8.* \| 9.*  | 7.4.* \| 8.0.* \| 8.1.* |
 | 2.*     | 10.*        | 8.1.* \| 8.2.*          |
+| 3.*     | 10.*        | 8.1.* \| 8.2.*          |
 
 ## Installation
 
