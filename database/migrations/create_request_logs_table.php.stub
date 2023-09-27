@@ -35,6 +35,7 @@ return new class extends Migration
             $table->index('client_request_id');
             $table->index('created_at'); // Used for pruning
             $table->index(['user_id', 'created_at']);
+            $table->index(['team_id', 'created_at']);
         });
     }
 
