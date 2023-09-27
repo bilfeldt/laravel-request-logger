@@ -5,7 +5,6 @@ namespace Bilfeldt\RequestLogger\Models;
 use Bilfeldt\RequestLogger\Contracts\RequestLoggerInterface;
 use Bilfeldt\RequestLogger\Database\Factories\RequestLogFactory;
 use Bilfeldt\RequestLogger\RequestLoggerFacade;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\MassPrunable;
 use Illuminate\Database\Eloquent\Model;

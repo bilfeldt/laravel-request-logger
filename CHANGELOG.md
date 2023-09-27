@@ -20,7 +20,8 @@ No breaking changes. The only changes are to the development dependencies used f
 ### 3.0.0
 
 - Rely on the [`bilfeldt/laravel-correlation-id`](https://packagist.org/packages/bilfeldt/laravel-correlation-id) package for request and response headers and unique id.
-- Log both `Correlation-ID` and `Request-ID`.
+- Log both `Correlation-ID` header and the unique _Request ID_.
+- Remove dependency on `spatie/laravel-package-tools`
 
 ### 2.2.0 - 2023-08-29
 

@@ -4,7 +4,6 @@ namespace Bilfeldt\RequestLogger\Tests\Unit;
 
 use Bilfeldt\RequestLogger\Tests\TestCase;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class RequestMacroTest extends TestCase
 {
