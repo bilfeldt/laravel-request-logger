@@ -4,11 +4,25 @@ All notable changes to `laravel-request-logger` will be documented in this file.
 
 ## Upgrade guides
 
+### 2.* => 3.*
+
+- Because the package now supports both `Correlation-ID` and `Request-ID` then two new database columns needs to be inserted into the `request_logs` table. See the table migration stub for the required changes.
+- The function `aggregate($request, $response, $date)` has been removed from the `RequestLog` model. If you are using this function instead then use the [`bilfeldt/laravel-route-statistics`](https://packagist.org/packages/bilfeldt/laravel-route-statistics) package for aggregated statistical logging if needed.
+- The config `log_context` has been removed. If you are using this config to add Log context, then apply the `LogContextMiddleware` from the now required package [`bilfeldt/laravel-correlation-id`](https://packagist.org/packages/bilfeldt/laravel-correlation-id) package for the relevant routes.
+- The config `header` has been removed. If you are using this config to add the unique request id to the response in the `Request-ID` headerm then do so using your own middleware, or consider (recommended) to instead set the `Correlation-ID` header using the `CorrelationIdMiddleware` from the now required package [`bilfeldt/laravel-correlation-id`](https://packagist.org/packages/bilfeldt/laravel-correlation-id) package for the relevant routes.
+
 ### 1.* => 2.*
 
 No breaking changes. The only changes are to the development dependencies used for testing and then the minimum Laravel and PHP requirements.
 
 ## Changes
+
+### 3.0.0
+
+- Rely on the [`bilfeldt/laravel-correlation-id`](https://packagist.org/packages/bilfeldt/laravel-correlation-id) package for request and response headers and unique id.
+- Log both `Correlation-ID` header and the unique _Request ID_.
+- Remove dependency on `spatie/laravel-package-tools`
+- Require PHP 8.2
 
 ### 2.2.0 - 2023-08-29
 

@@ -21,9 +21,9 @@
     ],
     "require": {
         "php": "~8.1.0 || ~8.2.0",
-        "spatie/laravel-package-tools": "^1.4.3",
         "illuminate/contracts": "^10.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "bilfeldt/laravel-correlation-id": "^1.0"
     },
     "require-dev": {
         "nunomaduro/collision": "^7.2",
@@ -58,6 +58,6 @@
             }
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

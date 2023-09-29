@@ -13,6 +13,7 @@ Zero configuration logging of Requests and Responses to database or custom drive
 |---------|-------------|-------------------------|
 | 1.*     | 8.* \| 9.*  | 7.4.* \| 8.0.* \| 8.1.* |
 | 2.*     | 10.*        | 8.1.* \| 8.2.*          |
+| 3.*     | 10.*        | 8.1.* \| 8.2.*          |
 
 ## Installation
 
@@ -77,16 +78,6 @@ public function index(Request $request)
 
     //
 }
-```
-
-### Unique Request UUID
-
-This package adds a macro `getUniqueId()` for the `Illuminate\Http\Request` class which generates a unique request UUID that will be saved to the logs and that can be included as [Global Log Context](https://laravel.com/docs/8.x/logging#contextual-information) which will pass it onto any application logging or error reporting. This id will per default also be added as a custom response header.
-
-**This is an extremely helpful trick when debugging customer requests as both customer, application logs, reported errors and request logs (this package) now all include a single common UUID!**
-
-```php
-$request->getUniqueId(); // Example: 94d0e2d6-4cc6-449c-9140-80bca47d29b4
 ```
 
 ## Extending with custom Drivers

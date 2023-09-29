@@ -11,6 +11,8 @@ return new class extends Migration
         Schema::create('request_logs', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->nullable()->unique();
+            $table->string('correlation_id')->nullable(); // This is not unique if subsequent (queued) requests are logged
+            $table->string('client_request_id')->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->unsignedBigInteger('team_id')->nullable(); // Can be changed to the following if your application uses teams: $table->foreignId('team_id')->nullable()->constrained();
             $table->ipAddress('ip')->nullable();
@@ -29,8 +31,11 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index('uuid');
+            $table->index('correlation_id');
+            $table->index('client_request_id');
             $table->index('created_at'); // Used for pruning
             $table->index(['user_id', 'created_at']);
+            $table->index(['team_id', 'created_at']);
         });
     }
 

@@ -6,36 +6,45 @@ use Bilfeldt\RequestLogger\Commands\PruneRequestLogsCommand;
 use Bilfeldt\RequestLogger\Middleware\LogRequestMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Str;
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class RequestLoggerServiceProvider extends PackageServiceProvider
+class RequestLoggerServiceProvider extends ServiceProvider
 {
-    public function configurePackage(Package $package): void
+    /**
+     * Register the application services.
+     */
+    public function register()
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
-        $package
-            ->name('laravel-request-logger')
-            ->hasConfigFile()
-            ->hasMigration('create_request_logs_table')
-            ->hasCommand(PruneRequestLogsCommand::class);
-    }
+        $this->mergeConfigFrom(__DIR__.'/../config/request-logger.php', 'request-logger');
 
-    public function packageRegistered()
-    {
         $this->app->register(EventServiceProvider::class);
     }
 
-    public function packageBooted()
+    /**
+     * Bootstrap the application services.
+     */
+    public function boot()
     {
-        $this->registerMiddlewareAlias();
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/request-logger.php' => config_path('request-logger.php'),
+            ], ['config', 'request-logger-config']);
 
-        $this->registerMacros();
+            $this->publishes([
+                __DIR__.'/../database/migrations/create_request_logs_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_request_logs_table.php'),
+                // you can add any number of migrations here
+            ], ['migrations', 'request-logger-migrations']);
+
+            $this->commands([
+                PruneRequestLogsCommand::class,
+            ]);
+        }
+
+        $this->registerMiddlewareAlias();
+        $this->bootMacros();
+
+        // TODO: Register command PruneRequestLogsCommand::class);
+        // TODO: Register EventServiceProvider::class
     }
 
     private function registerMiddlewareAlias(): void
@@ -45,16 +54,8 @@ class RequestLoggerServiceProvider extends PackageServiceProvider
             ->aliasMiddleware('requestlog', LogRequestMiddleware::class);
     }
 
-    private function registerMacros(): void
+    private function bootMacros(): void
     {
-        Request::macro('getUniqueId', function (): string {
-            if (! $this->attributes->has('uuid')) {
-                $this->attributes->set('uuid', (string) Str::orderedUuid());
-            }
-
-            return $this->attributes->get('uuid');
-        });
-
         Request::macro('enableLog', function (string ...$drivers): Request {
             $loggers = $this->attributes->get('log', []);
 

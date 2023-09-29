@@ -4,28 +4,6 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Log Context
-    |--------------------------------------------------------------------------
-    |
-    | When not empty this will add the Unique Request UUID to the log context
-    | using the specified key.
-    |
-    */
-    'log_context' => env('REQUEST_LOGGER_CONTEXT', 'request-uuid'), // null means disabled
-
-    /*
-    |--------------------------------------------------------------------------
-    | Response Header
-    |--------------------------------------------------------------------------
-    |
-    | When not empty this will add the Unique Request UUID to the response
-    | headers using the specified key.
-    |
-    */
-    'header' => env('REQUEST_LOGGER_HEADER', 'Request-Id'), // null means disabled
-
-    /*
-    |--------------------------------------------------------------------------
     | Enable logging
     |--------------------------------------------------------------------------
     |
