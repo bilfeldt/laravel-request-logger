@@ -17,6 +17,10 @@ No breaking changes. The only changes are to the development dependencies used f
 
 ## Changes
 
+### 3.1.0
+
+- Add PHP 8.3 compatibility
+
 ### 3.0.0
 
 - Rely on the [`bilfeldt/laravel-correlation-id`](https://packagist.org/packages/bilfeldt/laravel-correlation-id) package for request and response headers and unique id.
