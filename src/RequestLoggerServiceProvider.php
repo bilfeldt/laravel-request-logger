@@ -16,8 +16,6 @@ class RequestLoggerServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/request-logger.php', 'request-logger');
-
-        $this->app->register(EventServiceProvider::class);
     }
 
     /**
