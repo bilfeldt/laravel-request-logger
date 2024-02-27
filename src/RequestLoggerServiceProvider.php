@@ -38,6 +38,8 @@ class RequestLoggerServiceProvider extends ServiceProvider
             ]);
         }
 
+        $this->app->terminating(new LogHandler);
+
         $this->registerMiddlewareAlias();
         $this->bootMacros();
 
