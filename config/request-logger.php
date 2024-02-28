@@ -1,6 +1,8 @@
 <?php
 
 // config for Bilfeldt/RequestLogger
+use Bilfeldt\RequestLogger\ArrayLogger;
+
 return [
     /*
     |--------------------------------------------------------------------------

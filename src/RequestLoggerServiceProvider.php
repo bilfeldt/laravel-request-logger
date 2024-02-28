@@ -43,6 +43,8 @@ class RequestLoggerServiceProvider extends ServiceProvider
         $this->registerMiddlewareAlias();
         $this->bootMacros();
 
+        $this->app->scoped(ArrayLogger::class);
+
         // TODO: Register command PruneRequestLogsCommand::class);
         // TODO: Register EventServiceProvider::class
     }

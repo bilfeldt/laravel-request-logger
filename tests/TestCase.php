@@ -2,6 +2,8 @@
 
 namespace Bilfeldt\RequestLogger\Tests;
 
+use Bilfeldt\CorrelationId\CorrelationIdServiceProvider;
+use Bilfeldt\RequestLogger\Middleware\LogRequestMiddleware;
 use Bilfeldt\RequestLogger\RequestLoggerServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -21,14 +23,21 @@ class TestCase extends Orchestra
     {
         return [
             RequestLoggerServiceProvider::class,
+            CorrelationIdServiceProvider::class,
         ];
     }
 
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
+        config()->set('request-logger.default', 'array');
 
         $migration = include __DIR__.'/../database/migrations/create_request_logs_table.php.stub';
         $migration->up();
+    }
+
+    protected function defineRoutes($router)
+    {
+        $router->get('/', static fn () => 'Test!')->middleware(LogRequestMiddleware::class)->name('test');
     }
 }
