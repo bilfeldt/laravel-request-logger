@@ -1,35 +1,34 @@
 <?php
 
-namespace Bilfeldt\RequestLogger\Listeners;
+namespace Bilfeldt\RequestLogger;
 
-use Bilfeldt\RequestLogger\RequestLoggerFacade;
-use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * This class is highly inspired by the Laravel Telescope Request Watcher.
- *
- * @see https://github.com/laravel/telescope/blob/master/src/Watchers/RequestWatcher.php
- */
-class LogRequest
+class LogHandler
 {
-    public function handle(RequestHandled $event)
+    /**
+     * Handle a request log
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @return void
+     */
+    public function __invoke(Request $request, Response $response)
     {
-        $startTime = defined('LARAVEL_START') ? LARAVEL_START : $event->request->server('REQUEST_TIME_FLOAT');
+        $startTime = defined('LARAVEL_START') ? LARAVEL_START : $request->server('REQUEST_TIME_FLOAT');
         $duration = $startTime ? floor((microtime(true) - $startTime) * 1000) : null;
         $memory = memory_get_peak_usage(true);
 
-        if ($this->shouldLog($event->request, $event->response)) {
-            $event->request->enableLog();
+        if ($this->shouldLog($request, $response)) {
+            $request->enableLog();
         }
 
-        foreach (array_unique($event->request->attributes->get('log', [])) as $driver) {
+        foreach (array_unique($request->attributes->get('log', [])) as $driver) {
             RequestLoggerFacade::driver($driver)->log(
-                $event->request,
-                $event->response,
+                $request,
+                $response,
                 $duration,
                 $memory
             );
