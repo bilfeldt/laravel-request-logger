@@ -89,3 +89,4 @@ return [
     |
     */
     'user_model' => env('REQUEST_LOGGER_USER_MODEL', config('auth.providers.users.model')),
+];
