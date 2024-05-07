@@ -87,6 +87,8 @@ return [
     | This is the model used for user relationships.
     | You can set a custom user model for relationships.
     |
+    | Leaving this empty will use the model from the 'users' auth provider.
+    |
     */
-    'user_model' => env('REQUEST_LOGGER_USER_MODEL', config('auth.providers.users.model')),
+    'user_model' => env('REQUEST_LOGGER_USER_MODEL'),
 ];

@@ -69,7 +69,7 @@ class RequestLog extends Model implements RequestLoggerInterface
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(config('request-logger.user_model'));
+        return $this->belongsTo(config('request-logger.user_model') ?? config('auth.providers.users.model'));
     }
 
     public function team(): BelongsTo
