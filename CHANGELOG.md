@@ -17,6 +17,8 @@ No breaking changes. The only changes are to the development dependencies used f
 
 ## Changes
 
+- Add config for which model to use in the `RequestLog` models `user()` relationship
+
 ### 3.2.0
 
 - Add Laravel 11 compatibility
