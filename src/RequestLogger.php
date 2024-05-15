@@ -29,6 +29,11 @@ class RequestLogger extends Manager
         return new NullLogger();
     }
 
+    public function createArrayDriver(): ArrayLogger
+    {
+        return app()->make(ArrayLogger::class);
+    }
+
     public function createModelDriver(): RequestLoggerInterface
     {
         $model = config('request-logger.drivers.model.class');
