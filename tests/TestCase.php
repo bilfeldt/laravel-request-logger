@@ -30,7 +30,6 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-        config()->set('request-logger.default', 'array');
 
         $migration = include __DIR__.'/../database/migrations/create_request_logs_table.php.stub';
         $migration->up();
