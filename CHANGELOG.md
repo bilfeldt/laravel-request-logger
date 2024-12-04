@@ -17,6 +17,10 @@ No breaking changes. The only changes are to the development dependencies used f
 
 ## Changes
 
+### 3.4.0 - 2024-12-04
+
+- Add PHP 8.4 support
+
 ### 3.3.0 - 2024-05-07
 
 - Add config for which model to use in the `RequestLog` models `user()` relationship
