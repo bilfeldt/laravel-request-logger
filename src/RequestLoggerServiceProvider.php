@@ -3,9 +3,12 @@
 namespace Bilfeldt\RequestLogger;
 
 use Bilfeldt\RequestLogger\Commands\PruneRequestLogsCommand;
+use Bilfeldt\RequestLogger\Listeners\LogRequest;
 use Bilfeldt\RequestLogger\Middleware\LogRequestMiddleware;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class RequestLoggerServiceProvider extends ServiceProvider
@@ -17,7 +20,7 @@ class RequestLoggerServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/request-logger.php', 'request-logger');
 
-        $this->app->register(EventServiceProvider::class);
+        Event::listen(RequestHandled::class, LogRequest::class);
     }
 
     /**
@@ -44,7 +47,6 @@ class RequestLoggerServiceProvider extends ServiceProvider
         $this->bootMacros();
 
         // TODO: Register command PruneRequestLogsCommand::class);
-        // TODO: Register EventServiceProvider::class
     }
 
     private function registerMiddlewareAlias(): void
