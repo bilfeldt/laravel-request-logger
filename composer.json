@@ -46,7 +46,8 @@
         "test": "./vendor/bin/testbench package:test --no-coverage",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     },
-    "config": [],
+    "config": {
+    },
     "extra": {
         "laravel": {
             "providers": [
