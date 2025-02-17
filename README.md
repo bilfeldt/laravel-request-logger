@@ -3,7 +3,7 @@
 ![bilfeldt/laravel-request-logger](art/banner.png)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/bilfeldt/laravel-request-logger.svg?style=flat-square)](https://packagist.org/packages/bilfeldt/laravel-request-logger)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/bilfeldt/laravel-request-logger/run-tests?label=tests)](https://github.com/bilfeldt/laravel-request-logger/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Tests Action Status](https://github.com/bilfeldt/laravel-request-logger/actions/workflows/run-tests.yml/badge.svg)](https://github.com/bilfeldt/laravel-request-logger/actions/workflows/run-tests.yml)
 [![StyleCI Code Style Status](https://github.styleci.io/repos/424928370/shield)](https://github.styleci.io/repos/424928370/shield)
 [![Total Downloads](https://img.shields.io/packagist/dt/bilfeldt/laravel-request-logger.svg?style=flat-square)](https://packagist.org/packages/bilfeldt/laravel-request-logger)
 
