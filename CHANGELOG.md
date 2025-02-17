@@ -17,6 +17,10 @@ No breaking changes. The only changes are to the development dependencies used f
 
 ## Changes
 
+### 3.6.0 - 2025-02-17
+
+- Add Laravel 12 support
+
 ### 3.5.0 - 2025-02-11
 
 - Move registration of event listeners to the main service provider and remove the dedicated EventServiceProvider.
