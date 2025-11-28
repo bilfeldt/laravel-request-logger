@@ -17,6 +17,10 @@ No breaking changes. The only changes are to the development dependencies used f
 
 ## Changes
 
+### 3.7.0 - 2025-11-28
+
+- Add PHP 8.5 support
+
 ### 3.6.0 - 2025-02-17
 
 - Add Laravel 12 support
