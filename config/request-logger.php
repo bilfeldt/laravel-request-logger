@@ -88,7 +88,7 @@ return [
         'password_confirm',
         'apikey',
         'api_token',
-        'Authorization',
+        'authorization', // HTTP header — filter matching against headers is case-insensitive
         'filter.search',
     ],
 

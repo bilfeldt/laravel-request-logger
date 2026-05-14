@@ -20,6 +20,7 @@ No breaking changes. The only changes are to the development dependencies used f
 ### Unreleased
 
 - Add `request-logger.connection` config option (controlled by the `REQUEST_LOGGER_DB_CONNECTION` env var) so the `RequestLog` model and its migration can be stored in a dedicated database connection separate from the main application data.
+- Fix: HTTP header filters are now matched case-insensitively. The default `Authorization` filter never matched because Symfony's `HeaderBag` lowercases header names while `Arr::get` is case-sensitive — Bearer tokens were silently written to the log. Header filtering now lowercases both sides; payload filtering remains case-sensitive (JSON keys are case-sensitive per spec).
 
 ### 3.8.0 - 2026-03-06
 
