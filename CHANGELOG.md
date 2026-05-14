@@ -17,6 +17,10 @@ No breaking changes. The only changes are to the development dependencies used f
 
 ## Changes
 
+### Unreleased
+
+- Add `request-logger.connection` config option (controlled by the `REQUEST_LOGGER_DB_CONNECTION` env var) so the `RequestLog` model and its migration can be stored in a dedicated database connection separate from the main application data.
+
 ### 3.8.0 - 2026-03-06
 
 - Add Laravel 13 support

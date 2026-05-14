@@ -36,6 +36,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Database Connection
+    |--------------------------------------------------------------------------
+    |
+    | The database connection that should be used by the model driver. When
+    | left empty (or null) the default connection from `config/database.php`
+    | will be used. This makes it possible to store request logs in a
+    | dedicated logging database, separate from the main application data.
+    |
+    */
+    'connection' => env('REQUEST_LOGGER_DB_CONNECTION'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Driver
     |--------------------------------------------------------------------------
     |

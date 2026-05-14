@@ -51,6 +51,11 @@ class RequestLog extends Model implements RequestLoggerInterface
         'response_body' => 'json',
     ];
 
+    public function getConnectionName(): ?string
+    {
+        return config('request-logger.connection') ?: parent::getConnectionName();
+    }
+
     //======================================================================
     // ACCESSORS
     //======================================================================
