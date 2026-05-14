@@ -110,6 +110,16 @@ Note that the default `RequestLog` model setup by this package will not be disco
 
 ## Notes and advises
 
+### Storing logs in a dedicated database
+
+The `RequestLog` model uses the application's default database connection. To store logs in a separate database (e.g. a dedicated logging database to keep them out of your main application data), set the `REQUEST_LOGGER_DB_CONNECTION` environment variable to a connection name configured in `config/database.php`:
+
+```dotenv
+REQUEST_LOGGER_DB_CONNECTION=logging
+```
+
+When using a connection that points at a different database than the `users` table, drop the `user_id` foreign key constraint in the migration — cross-database foreign keys cannot be enforced. Replace `foreignId('user_id')->constrained()->cascadeOnDelete()` with `unsignedBigInteger('user_id')->nullable()->index()`.
+
 ### Proxies and load balancers
 
 When using proxies and/or load balancers then the IP address of the proxy/load balancer must be listed as a [Trusted Proxy](https://laravel.com/docs/8.x/requests#configuring-trusted-proxies) for the users IP address to be correctly logged as the IP of the proxy itself will be logged otherwise.

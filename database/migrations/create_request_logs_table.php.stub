@@ -6,14 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    public function getConnection(): ?string
+    {
+        return config('request-logger.connection') ?: parent::getConnection();
+    }
+
     public function up()
     {
-        Schema::create('request_logs', function (Blueprint $table) {
+        Schema::connection($this->getConnection())->create('request_logs', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->nullable()->unique();
             $table->string('correlation_id')->nullable(); // This is not unique if subsequent (queued) requests are logged
             $table->string('client_request_id')->nullable();
-            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete(); // Drop the FK constraint (use unsignedBigInteger) if 'request-logger.connection' points at a different database than the users table
             $table->unsignedBigInteger('team_id')->nullable(); // Can be changed to the following if your application uses teams: $table->foreignId('team_id')->nullable()->constrained();
             $table->ipAddress('ip')->nullable();
             $table->string('session')->nullable();
@@ -41,6 +46,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('request_logs');
+        Schema::connection($this->getConnection())->dropIfExists('request_logs');
     }
 };
