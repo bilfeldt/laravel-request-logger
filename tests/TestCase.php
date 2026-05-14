@@ -2,6 +2,7 @@
 
 namespace Bilfeldt\RequestLogger\Tests;
 
+use Bilfeldt\CorrelationId\CorrelationIdServiceProvider;
 use Bilfeldt\RequestLogger\RequestLoggerServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -20,6 +21,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
+            CorrelationIdServiceProvider::class,
             RequestLoggerServiceProvider::class,
         ];
     }

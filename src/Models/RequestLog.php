@@ -111,9 +111,9 @@ class RequestLog extends Model implements RequestLoggerInterface
         $model->route = $this->truncateToLength(optional($request->route())->getName() ?? optional($request->route())->uri()); // Note that $request->route()->uri() does not replace the placeholders while $request->getRequestUri() replaces the placeholders
         $model->path = $this->truncateToLength($request->path());
         $model->status = $response->getStatusCode();
-        $model->headers = $this->getFiltered($request->headers->all()) ?: null;
+        $model->headers = $this->getFilteredHeaders($request->headers->all()) ?: null;
         $model->payload = $this->getFiltered($request->input()) ?: null;
-        $model->response_headers = $this->getFiltered($response->headers->all()) ?: null;
+        $model->response_headers = $this->getFilteredHeaders($response->headers->all()) ?: null;
         $model->response_body = $this->getLoggableResponseContent($response);
         $model->duration = $duration;
         $model->memory = round($memory / 1024 / 1024, 2); // [MB]
@@ -181,6 +181,19 @@ class RequestLog extends Model implements RequestLoggerInterface
     protected function getFiltered(array $data)
     {
         return $this->replaceParameters($data, RequestLoggerFacade::getFilters());
+    }
+
+    /**
+     * Filter HTTP headers. HTTP header names are case-insensitive per RFC 7230
+     * and Symfony's HeaderBag always lowercases the keys, so the filter tokens
+     * are lowercased here to make matching reliable regardless of the casing
+     * used in the configured filter list.
+     */
+    protected function getFilteredHeaders(array $headers)
+    {
+        $filters = array_map('strtolower', RequestLoggerFacade::getFilters());
+
+        return $this->replaceParameters($headers, $filters);
     }
 
     protected function replaceParameters(array $array, array $hidden, string $value = '********'): array
