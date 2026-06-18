@@ -155,7 +155,7 @@ class RequestLog extends Model implements RequestLoggerInterface
             }
 
             if (Str::startsWith(strtolower($response->headers->get('Content-Type')), 'text/plain')) {
-                return $this->contentWithinLimits($content) ? [$content] : ['purge' => 'bilfeldt/laravel-request-logger'];
+                return $this->contentWithinLimits($content) ? [$this->toValidUtf8($content)] : ['purge' => 'bilfeldt/laravel-request-logger'];
             }
         }
 
@@ -180,7 +180,7 @@ class RequestLog extends Model implements RequestLoggerInterface
 
     protected function getFiltered(array $data)
     {
-        return $this->replaceParameters($data, RequestLoggerFacade::getFilters());
+        return $this->toValidUtf8($this->replaceParameters($data, RequestLoggerFacade::getFilters()));
     }
 
     /**
@@ -193,7 +193,38 @@ class RequestLog extends Model implements RequestLoggerInterface
     {
         $filters = array_map('strtolower', RequestLoggerFacade::getFilters());
 
-        return $this->replaceParameters($headers, $filters);
+        return $this->toValidUtf8($this->replaceParameters($headers, $filters));
+    }
+
+    /**
+     * Recursively coerce every string to valid UTF-8.
+     *
+     * Request data can contain arbitrary bytes that are not valid UTF-8 — most
+     * commonly from malformed or malicious requests (e.g. CVE-2024-4577
+     * "php-cgi.exe" scanner probes). The payload, headers and response_body
+     * attributes are cast to JSON, and json_encode() throws a
+     * JsonEncodingException ("Malformed UTF-8 characters") on such bytes, which
+     * aborts the request when the log row is saved. Scrubbing to valid UTF-8
+     * here keeps logging resilient to untrusted input.
+     *
+     * @param  array|string  $value
+     * @return array|string
+     */
+    protected function toValidUtf8($value)
+    {
+        if (is_array($value)) {
+            array_walk_recursive($value, function (&$item) {
+                $item = $this->toValidUtf8($item);
+            });
+
+            return $value;
+        }
+
+        if (is_string($value) && ! mb_check_encoding($value, 'UTF-8')) {
+            return mb_convert_encoding($value, 'UTF-8', 'UTF-8');
+        }
+
+        return $value;
     }
 
     protected function replaceParameters(array $array, array $hidden, string $value = '********'): array

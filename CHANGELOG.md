@@ -21,6 +21,7 @@ No breaking changes. The only changes are to the development dependencies used f
 
 - Add `request-logger.connection` config option (controlled by the `REQUEST_LOGGER_DB_CONNECTION` env var) so the `RequestLog` model and its migration can be stored in a dedicated database connection separate from the main application data.
 - Fix: HTTP header filters are now matched case-insensitively. The default `Authorization` filter never matched because Symfony's `HeaderBag` lowercases header names while `Arr::get` is case-sensitive — Bearer tokens were silently written to the log. Header filtering now lowercases both sides; payload filtering remains case-sensitive (JSON keys are case-sensitive per spec).
+- Fix: Malformed UTF-8 in request data no longer crashes logging. The `payload`, `headers` and `response_body` attributes are cast to JSON, and `json_encode()` throws `JsonEncodingException` ("Malformed UTF-8 characters") when a request contains invalid byte sequences — commonly from malformed or malicious requests (e.g. CVE-2024-4577 `php-cgi.exe` scanner probes) — aborting the request as the log row is saved. Logged strings are now scrubbed to valid UTF-8 before encoding.
 
 ### 3.8.0 - 2026-03-06
 
